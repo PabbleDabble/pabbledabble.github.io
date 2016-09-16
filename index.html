@@ -3,14 +3,13 @@
     <head>
         <title>PTV</title>  
 
-	<!-- This is the JQuery references - copied from from site -->
+	<!-- This is the JS Grid references -->
 	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid.min.css" />
 	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid-theme.min.css" />
-
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid.min.js"></script>
 
 
-	<!-- This is the CDN to JQuery - Found / copied by me-->
+	<!-- This is the CDN to JQuery - Found / copied by me -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 	<!-- This replace the JS Grid files? -->
@@ -38,23 +37,17 @@
 	<div id="jsGrid2"></div>
 	-->
 
-	<!-- This is my testing of the validation -->
+	<!-- Run the find duplicates report -->
 	<div>
-
+		<button onclick="report_duplicates()">Find Duplicate Entries</button>
 	</div>
 
 
 
-
-<!-- Validation for item entry -->
-<!-- 
-If species <> vacant then
- dbh >0 and condition <> "N/A"
--->
 <script>
-
-
-
+function report_duplicates() {
+	alert("Report Initiated");
+}
 </script>
 
 
@@ -91,7 +84,15 @@ If species <> vacant then
     ];
 
 
-<!-- This didn't work just yet, but keep it for later for custom validation -->
+/*
+If species <> vacant then
+dbh >0 and condition <> "N/A"
+*/
+
+
+
+
+
     jsGrid.validators.custom = {
 	message: function(value, item) {
 		return "Custom -- " + item.count;
@@ -142,50 +143,6 @@ If species <> vacant then
 
 </script>
 
-
-
-
-
-
-<!-- Found a random data set from the JS-Grid site, figured I'd keep it in for now, not used in production -->
-<script>
-    var clients = [
-        { "Name": "Otto Clay", "Age": 25, "Country": 1, "Address": "Ap #897-1459 Quam Avenue", "Married": false },
-        { "Name": "Connor Johnston", "Age": 45, "Country": 2, "Address": "Ap #370-4647 Dis Av.", "Married": true },
-        { "Name": "Lacey Hess", "Age": 29, "Country": 3, "Address": "Ap #365-8835 Integer St.", "Married": false },
-        { "Name": "Timothy Henson", "Age": 56, "Country": 1, "Address": "911-5143 Luctus Ave", "Married": true },
-        { "Name": "Ramona Benton", "Age": 32, "Country": 3, "Address": "Ap #614-689 Vehicula Street", "Married": false }
-    ];
- 
-    var countries = [
-        { Name: "", Id: 0 },
-        { Name: "United States", Id: 1 },
-        { Name: "Canada", Id: 2 },
-        { Name: "United Kingdom", Id: 3 }
-    ];
- 
-    $("#jsGrid2").jsGrid({
-	<!-- Default field options -->
-        width: "100%",
-        height: "400px",
- 
-        inserting: true,
-        editing: true,
-        sorting: true,
-        paging: true,
- 
-        data: clients,
- 
-        fields: [
-            { name: "Name", type: "text", width: 150, validate: "required" },
-            { name: "Age", type: "number", width: 50 },
-            { name: "Address", type: "text", width: 200 },
-            { name: "Country", type: "select", items: countries, valueField: "Id", textField: "Name" },
-            { name: "Married", type: "checkbox", title: "Is Married", sorting: false },
-            { type: "control" }
-        ]
-    });
-</script>
 
 
 
