@@ -84,14 +84,6 @@ function report_duplicates() {
     ];
 
 
-/*
-If species <> vacant then
-dbh >0 and condition <> "N/A"
-*/
-
-
-
-
 
     jsGrid.validators.custom = {
 	message: function(value, item) {
@@ -103,7 +95,10 @@ dbh >0 and condition <> "N/A"
     };	
 
 
-
+    jsGrid.beforeSubmit = function(postdata) {
+		alert("Test");
+		return true;
+	};
 
 
  
@@ -116,25 +111,48 @@ dbh >0 and condition <> "N/A"
         sorting: true,
         paging: true,
 	pageSize: 10,
-
+	//filtering: true,
         data: tree_inv,
+
+
+/*
+If species <> vacant then
+dbh >0 and condition <> "N/A"
+*/
+
+
+	//http://js-grid.com/docs/
+	onItemInserting: function(args) {
+		alert("Test --" + args.grid[0][0].name);
+	},
+
+
+
+
  
         fields: [
             { name: "ID", type: "text", width: 25 },
-            { name: "Address", type: "number", width: 50, 
-		validate: {message: "Address field is required", validator: function(value) {return value > 0; } } },		
-            { name: "Street", type: "text", width: 150, 
-		validate: {message: "Street field is required", validator: function(value) {return value > 0; } } },		
-            { name: "Side", type: "text", width: 50, 
-		validate: {message: "Side field is required", validator: function(value) {return value > 0; } } },		
-            { name: "Site", type: "number", width: 50, 
-		validate: {message: "Site field is required", validator: function(value) {return value > 0; } } },		
-            { name: "Species", type: "select", items: species_list, valueField: "Name", textField: "Name", 
-		validate: {message: "Select species from list, required field", validator: function(value) {return value > 0; } } },
-            { name: "DBH", type: "number", width: 50, 
-		validate: {message: "DBH field is required", validator: function(value) {return value > 0; } } },		
-            { name: "Condition", type: "select", items: condition_list, valueField: "Name", textField: "Name", 
-		validate: {message: "Condition field is required", validator: function(value) {return value > 0; } } },		
+            { name: "Address", type: "number", width: 50
+		//validate: {message: "Address field is required", validator: function(value) {return value > 0; } } 
+	    },
+            { name: "Street", type: "text", width: 150
+		//validate: {message: "Street field is required", validator: function(value) {return value != ""; } } 
+	    },
+            { name: "Side", type: "text", width: 50
+		//validate: {message: "Side field is required", validator: function(value) {return value != ""; } }
+	    },
+            { name: "Site", type: "number", width: 50
+		//validate: {message: "Site field is required", validator: function(value) {return value != ""; } } 
+	    },
+            { name: "Species", type: "select", items: species_list, valueField: "Name", textField: "Name"
+		//validate: {message: "Select species from list, required field", validator: function(value) {return value != ""; } }
+	    },
+            { name: "DBH", type: "number", width: 50
+		//validate: {message: "DBH field is required, value greater than zero.", validator: function(value) {return value > 0; } }
+	    },
+            { name: "Condition", type: "select", items: condition_list, valueField: "Name", textField: "Name"
+		//validate: {message: "Select condition from list, required field", validator: function(value) {return value != ""; } }
+	    },
             { type: "control" }
         ]
     });
