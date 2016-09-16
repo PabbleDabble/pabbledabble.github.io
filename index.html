@@ -28,7 +28,6 @@
 
 
 
-
     </head>
     <body>
 	<!-- This puts grid on page -->
@@ -38,6 +37,31 @@
 	<!-- 
 	<div id="jsGrid2"></div>
 	-->
+
+	<!-- This is my testing of the validation -->
+	<div>
+
+	</div>
+
+
+
+
+<!-- Validation for item entry -->
+<!-- 
+If species <> vacant then
+ dbh >0 and condition <> "N/A"
+-->
+<script>
+
+
+
+</script>
+
+
+
+
+
+
 
 <script>
     var tree_inv = [
@@ -58,39 +82,64 @@
         { Name: "Vacant Planting Site", Id: 3 }
     ];
     var condition_list = [
-        { Name: "Good", Id: 0 },
-        { Name: "Fair", Id: 1 },
-        { Name: "Poor", Id: 2 },
-        { Name: "Dead", Id: 3 },
-        { Name: "N/A", Id: 4 }
+        { Name: "", Id: 0 },
+        { Name: "Good", Id: 1 },
+        { Name: "Fair", Id: 2 },
+        { Name: "Poor", Id: 3 },
+        { Name: "Dead", Id: 4 },
+        { Name: "N/A", Id: 5 }
     ];
+
+
+<!-- This didn't work just yet, but keep it for later for custom validation -->
+    jsGrid.validators.custom = {
+	message: function(value, item) {
+		return "Custom -- " + item.count;
+	},
+	validator: function(value, item) {
+		return false;
+	}
+    };	
+
+
 
 
 
  
     $("#jsGrid1").jsGrid({
         width: "100%",
-        height: "400px",
+        height: "600px",
  
         inserting: true,
         editing: true,
         sorting: true,
         paging: true,
- 
+	pageSize: 10,
+
         data: tree_inv,
  
         fields: [
-            { name: "ID", type: "text", width: 25, validate: "required" },
-            { name: "Address", type: "number", width: 50 },
-            { name: "Street", type: "text", width: 150 },
-            { name: "Side", type: "text", width: 50 },
-            { name: "Site", type: "number", width: 50 },
-            { name: "Species", type: "select", items: species_list, valueField: "Name", textField: "Name" },
-            { name: "DBH", type: "number", width: 50 },
-            { name: "Condition", type: "select", items: condition_list, valueField: "Name", textField: "Name" },
+            { name: "ID", type: "text", width: 25 },
+            { name: "Address", type: "number", width: 50, 
+		validate: {message: "Address field is required", validator: function(value) {return value > 0; } } },		
+            { name: "Street", type: "text", width: 150, 
+		validate: {message: "Street field is required", validator: function(value) {return value > 0; } } },		
+            { name: "Side", type: "text", width: 50, 
+		validate: {message: "Side field is required", validator: function(value) {return value > 0; } } },		
+            { name: "Site", type: "number", width: 50, 
+		validate: {message: "Site field is required", validator: function(value) {return value > 0; } } },		
+            { name: "Species", type: "select", items: species_list, valueField: "Name", textField: "Name", 
+		validate: {message: "Select species from list, required field", validator: function(value) {return value > 0; } } },
+            { name: "DBH", type: "number", width: 50, 
+		validate: {message: "DBH field is required", validator: function(value) {return value > 0; } } },		
+            { name: "Condition", type: "select", items: condition_list, valueField: "Name", textField: "Name", 
+		validate: {message: "Condition field is required", validator: function(value) {return value > 0; } } },		
             { type: "control" }
         ]
     });
+
+
+
 </script>
 
 
