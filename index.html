@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>  
     <head>
-        <title>PTV</title>  
+	<title>PTV</title>
 
 	<!-- This is the JS Grid references -->
 	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid.min.css" />
@@ -12,68 +12,59 @@
 	<!-- This is the CDN to JQuery - Found / copied by me -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-	<!-- This replace the JS Grid files? -->
+	<!-- This replace the JS Grid files -->
 	<script type="text/javascript" src=https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid.js
-
-
-
 	<script type="text/javascript" src="jsgrid.min.js"></script>
-
-
 
 	<!-- This is where the records are stored, just used them hardcoded below for now --> 
 	<link type="text" href="records" />
-
-
-
 
     </head>
     <body>
 	<!-- This puts grid on page -->
 	<div id="jsGrid1"></div>
+	
 	<!-- I had a second tester grid in here for comparing / playing -->
 	<!-- Might still use this for the duplicate values report -->
 	<!-- 
 	<div id="jsGrid2"></div>
 	-->
 
-	<!-- Run the find duplicates report -->
+	<!-- Button to run the find duplicates report -->
 	<div>
 		<button onclick="report_duplicates()">Find Duplicate Entries</button>
 	</div>
 
 
+<!-- I know the scripts could be in a separate js file, but for now I am just keeping everything together.  
 
-<script>
+<script> <!-- Duplicate Reports Script -->
 function report_duplicates() {
 	alert("Report Initiated");
 }
 </script>
 
-
-
-
-
-
-
-<script>
+<script> <!-- Holds all the grid information and scripts -->
+	//Data for table
     var tree_inv = [
-	{"ID":"1","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"1","Species":"Acer Rubrum","DBH":"21","Condition":"Good"},
-	{"ID":"2","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"2","Species":"Acer Rubrum","DBH":"18","Condition":"Fair"},
-	{"ID":"3","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"3","Species":"Acer Rubrum","DBH":"19","Condition":"Poor"},
-	{"ID":"4","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"3","Species":"Vacant Planting Site","DBH":"0","Condition":"N/A"},
-	{"ID":"5","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"4","Species":"Acer Rubrum","DBH":"20","Condition":"Dead"},
-	{"ID":"6","Address":"3738","Street":"Fishcreek  Rd","Side":"Front","Site":"1","Species":"Vacant Planting Site","DBH":"0","Condition":"N/A"},
-	{"ID":"7","Address":"3738","Street":"Fishcreek  Rd","Side":"Front","Site":"1","Species":"Fraxinus spp.","DBH":"12","Condition":"Dead"}
+		{"ID":"1","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"1","Species":"Acer Rubrum","DBH":"21","Condition":"Good"},
+		{"ID":"2","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"2","Species":"Acer Rubrum","DBH":"18","Condition":"Fair"},
+		{"ID":"3","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"3","Species":"Acer Rubrum","DBH":"19","Condition":"Poor"},
+		{"ID":"4","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"3","Species":"Vacant Planting Site","DBH":"0","Condition":"N/A"},
+		{"ID":"5","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"4","Species":"Acer Rubrum","DBH":"20","Condition":"Dead"},
+		{"ID":"6","Address":"3738","Street":"Fishcreek  Rd","Side":"Front","Site":"1","Species":"Vacant Planting Site","DBH":"0","Condition":"N/A"},
+		{"ID":"7","Address":"3738","Street":"Fishcreek  Rd","Side":"Front","Site":"1","Species":"Fraxinus spp.","DBH":"12","Condition":"Dead"}
 	];
- 
- 
+	
+	//Select / dropdown list for tree species
     var species_list = [
         { Name: "", Id: 0 },
         { Name: "Acer Rubrum", Id: 1 },
         { Name: "Fraxinus spp.", Id: 2 },
         { Name: "Vacant Planting Site", Id: 3 }
     ];
+	
+	//Select / dropdown list for tree condition
     var condition_list = [
         { Name: "", Id: 0 },
         { Name: "Good", Id: 1 },
@@ -83,25 +74,24 @@ function report_duplicates() {
         { Name: "N/A", Id: 5 }
     ];
 
-
-
-    jsGrid.validators.custom = {
-	message: function(value, item) {
-		return "Custom -- " + item.count;
-	},
-	validator: function(value, item) {
-		return false;
-	}
+	//This isn't implemented / doesn't work at the moment
+	jsGrid.validators.custom = {
+		message: function(value, item) {
+			return "Custom -- " + item.count;
+		},
+		validator: function(value, item) {
+			return false;
+		}
     };	
 
-
+	//This isn't implemented / doesn't work at the moment
     jsGrid.beforeSubmit = function(postdata) {
 		alert("Test");
 		return true;
 	};
 
 
- 
+	//This is the beginning of the grid setup
     $("#jsGrid1").jsGrid({
         width: "100%",
         height: "600px",
@@ -110,26 +100,43 @@ function report_duplicates() {
         editing: true,
         sorting: true,
         paging: true,
-	pageSize: 10,
-	//filtering: true,
+		pageSize: 10,		//Leave this at 10 for now, maybe set to 5 when I submit
+		//filtering: true,  //I don't know if I want this on for now / don't like the funcionality yet
         data: tree_inv,
 
 
-/*
-If species <> vacant then
-dbh >0 and condition <> "N/A"
-*/
 
 
-	//http://js-grid.com/docs/
-	onItemInserting: function(args) {
-		alert("Test --" + args.grid[0][0].name);
-	},
+		//This is where I'm working right now and doesn't work yet
+		//I think we'll need the same function to be called on -onitemupdate- too
+		//http://js-grid.com/docs/
+		//http://jsfiddle.net/tabalinas/rkxbgzrx/     -Maybe good examples
+		//var myGrid = $("#jsGrid1").jsGrid.getName;	//This does stuff, keep for now
+		
+		
+		//For this function, args is broken up into -grid- and -item-
+		//-grid- is the entire grid - working on accessing this
+		//-item- is the entry you're trying to work with		
+		onItemInserting: function(args) {
+			//var result = allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition);
+			//alert(result);
+			if (!(allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition))) {
+				//Don't allow row to be edited/inserted
+				args.cancel = true;
+			}			
+		},
+		onItemUpdating:  function(args) {
+			//var result = allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition);
+			//alert(result);
+			if (!(allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition))) {
+				//Don't allow row to be edited/inserted
+				args.cancel = true;
+			}			
+		}, 
 
 
 
-
- 
+		//Grid data setup / validation - validation is turned off
         fields: [
             { name: "ID", type: "text", width: 25 },
             { name: "Address", type: "number", width: 50
@@ -155,17 +162,46 @@ dbh >0 and condition <> "N/A"
 	    },
             { type: "control" }
         ]
-    });
+    });  //Ends jsGrid1
 
 
+	<!-- Function to make sure that if (when add/edit a line) if species <> vacant, then user must have DBH>0 and condition <> "N/A"
+	function allow_changed_inventory(check_species, check_DBH, check_condition) {
+		//alert(check_species + check_DBH + check_condition);
+		var things = condition_list[5].Name;
+		things = things + species_list[3].Name;
+		alert('Test--' + things);
+		return false;
+	}		
+	
 
-</script>
-
-
-
-
+	</script>
 
 
 
     </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
