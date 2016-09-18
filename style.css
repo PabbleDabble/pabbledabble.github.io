@@ -1,3 +1,4 @@
+/* Gets rid of vertical scroll with pagination */
 .jsgrid-grid-header,
 .jsgrid-grid-body{
   overflow: auto;

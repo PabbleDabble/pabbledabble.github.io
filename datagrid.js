@@ -1,50 +1,7 @@
-<!DOCTYPE html>
-<html>
-
-    <head>
-	<title>PTV</title>
-
-	<!-- This is the JS Grid references -->
-	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid.min.css" />
-	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid-theme.min.css" />
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid.min.js"></script>
-
-
-	<!-- This is the CDN to JQuery - Found / copied by me -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
-	<!-- This replace the JS Grid files -->
-	<script type="text/javascript" src=https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid.js
-	<script type="text/javascript" src="jsgrid.min.js"></script>
-
-	<!-- This is where the records are stored, just used them hardcoded below for now --> 
-	<!-- Something I would have like to have played with is multiple sets of data, to switch in and out to test different things -->
-	<link type="text" href="records" />
+(function() {
 	
-	<!-- My file references -->
-	<link rel="stylesheet" type="text/css" href="style.css">
 
-	
-    </head>
-	
-	
-    <body>
-	<!-- This puts grid on page -->
-	<div id="jsGrid1"></div>
-	
-	<!-- I had a second tester grid in here for comparing / playing -->
-	<!-- Might still use this for the duplicate values report -->
-	<!-- 
-	<div id="jsGrid2"></div>
-	-->
-
-	<!-- Button to run the find duplicates report -->
-	<div>
-		<button id="run_report" onclick="report_duplicates()">Find Duplicate Entries</button>
-	</div>
-
-	<script>
-		//Data for table
+	//Data for table
     var tree_inv = [
 		{"ID":"1","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"1","Species":"Acer Rubrum","DBH":"21","Condition":"Good"},
 		{"ID":"2","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"2","Species":"Acer Rubrum","DBH":"18","Condition":"Fair"},
@@ -160,7 +117,7 @@
             { name: "DBH", type: "number", width: 50
 			//validate: {message: "DBH field is required, value greater than zero.", validator: function(value) {return value > 0; } }
 	    },
-            { name: "Condition", type: "select", items: condition_list, valueField: "Name", textField: "Name", width: 100,
+            { name: "Condition", type: "select", items: condition_list, valueField: "Name", textField: "Name",
 			validate: {message: "Select condition from list, required field", validator: function(value) {return value != ""; } }
 	    },
             { type: "control" }
@@ -171,7 +128,7 @@
 			
 	
 
-	//Function to make sure that if (when add/edit a line) if species <> vacant, then user must have DBH>0 and condition <> "N/A"
+	<!-- Function to make sure that if (when add/edit a line) if species <> vacant, then user must have DBH>0 and condition <> "N/A"
 	function allow_changed_inventory(check_species, check_DBH, check_condition) {
 
 		//Get the N/A text from the condition list
@@ -192,91 +149,66 @@
 		return true;
 	};
 
-	//Function to look at all the grid data and look for any site duplicates (street/address/side/site)
+	
+	
+	
+	
+	
+
+	//This is where I'm working right now and doesn't work yet
+	//I think we'll need the same function to be called on -onitemupdate- too
+	//http://js-grid.com/docs/						-JS Grid Documentation
+	//http://jsfiddle.net/tabalinas/rkxbgzrx/     -Maybe good examples
+	//http://atott.ru/js-grid/
+	//https://github.com/tabalinas/jsgrid/issues/44     --This was the best one so far
+	//var myGrid = $("#jsGrid1").jsGrid.getName;	//This does stuff, keep for now
+	//var grid = $("#jsGrid1").data("JSGrid");     //This doesn't seem to work either
+	
+		
+	/*
+	//Passing the grid without .slice() will edits the actual grid
+	//mydata[0].ID = 77;
+	//$("#jsGrid1").jsGrid("refresh");
+	//return 0;		
+	
+	//Store row cound to iteration through
+	var rows_count = data.length;
+		
+	console.log(data.length);			
+		
+	//This will get all the field data...
+	//data_fields[i].name if you wanted the column names
+	//Not used now
+	var data_fields = $("#jsGrid1").jsGrid("option", "fields");
+	*/
+	
+	
 	function report_duplicates(){
 		//Get the data from the current grid on page
 		var data = new Array();
-		//I wanted to edit the data without changing the grid, 
+		//I wanted to edit the data without editing the actual grid, 
 		//so I cloned the data, this would probably not be wise for large sets of data
 		data = $("#jsGrid1").jsGrid("option", "data").slice();
-		
-		//This will hold any records that have matching site to any other
-		var duplicate_container = new Array();
-		
+
 		//Loop through each row, looking at all the following rows to check for any repeating entries (address/stress/side/site combo)
 		for (var i = 0; i < data.length - 1; i++) {
-		
-			//Use a new array for each compare_from, if it matches, push the entire group to the container at the end
-			var duplicate = new Array();
-			
-			//Parent record we're comparing the following items to.  
-			//This comparison should be n^2 time as each i element compares to the remaining n-i elements
-			//There might be other search / query functions that could do this better, but this is what I implemented first and worked nicely
 			var compare_from = data[i].Address + data[i].Street + data[i].Side + data[i].Site;
-			//console.log("Compare ID " + data[i].ID + " (" + compare_from + ")");		
+			console.log("Compare ID " + data[i].ID + " (" + compare_from + ")");
 			
-			//Then look at all the following j rows AFTER row i
+			//Then look at all the following rows AFTER row i
 			for (var j = i + 1; j < data.length; j++) {
 				var compare_to = data[j].Address + data[j].Street + data[j].Side + data[j].Site;
-				//console.log("     To ID " + data[j].ID + " (" + compare_to + ")");
+				console.log("     To ID " + data[j].ID + " (" + compare_to + ")");
 				if (compare_from === compare_to){
-				
-					//Only store the compare_from record once / the first time we see a duplicate
-					if (duplicate.length == 0) {
-						duplicate.push(data[i]);
-					}
-					//Push the compare_to record also
-					duplicate.push(data[j]);				
-				
-					//console.log("Row ID " + data[i].ID + " and row ID " + data[j].ID + " are the same.");
-					
-					//Once we've found a matching row, remove it from the data set so we don't look at it again
+					console.log("Row ID " + data[i].ID + " and row ID " + data[j].ID + " are the same.");
+					//Once we've found a matching row, remove it from the data set
 					//If row 1==2==3, we don't want to store 1 sameas(2,3), and also 2 sameas(3), we already know 2==3 from row 1's comparison
 					data.splice(j,1);
-					//Decrement the compare_to loop so we don't skip over the next one when we increment
 					j--;
 				}
 			}
-			//If we found a duplicate, then push it to the container
-			if (duplicate.length != 0) {
-				duplicate_container.push(duplicate);
-			}		
 		}
-		
 		//$("#jsGrid1").jsGrid("refresh");
-		//console.log("Function End");
-		//console.log(duplicate_container);
-		
-		//Send it back to print below the grid
-		return duplicate_container;		
+		console.log("Function End");
 	}
-
-	</script>	
-	
-	
-    </body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+});
