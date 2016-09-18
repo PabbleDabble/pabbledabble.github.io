@@ -32,19 +32,22 @@
 
 	<!-- Button to run the find duplicates report -->
 	<div>
-		<button onclick="report_duplicates()">Find Duplicate Entries</button>
+		<button id="run_report" onclick="report_duplicates()">Find Duplicate Entries</button>
 	</div>
 
 
-<!-- I know the scripts could be in a separate js file, but for now I am just keeping everything together.  
-
-<script> <!-- Duplicate Reports Script -->
-function report_duplicates() {
-	alert("Report Initiated");
-}
-</script>
 
 <script> <!-- Holds all the grid information and scripts -->
+
+	<!-- I know the scripts could be in a separate js file, but for now I am just keeping everything together.  -->
+	function report_duplicates() {
+		//alert("Report Initiated");
+		var mygrid = $("#jsGrid1").jsGrid;
+		//('getrowdata', 0)   //didn't work...?
+		//alert(mygrid.data);
+		alert('Initialize Report...');
+	}
+
 	//Data for table
     var tree_inv = [
 		{"ID":"1","Address":"3728","Street":"Fishcreek  Rd","Side":"Front","Site":"1","Species":"Acer Rubrum","DBH":"21","Condition":"Good"},
@@ -94,7 +97,7 @@ function report_duplicates() {
 	//This is the beginning of the grid setup
     $("#jsGrid1").jsGrid({
         width: "100%",
-        height: "600px",
+        height: "300px",
  
         inserting: true,
         editing: true,
@@ -109,7 +112,7 @@ function report_duplicates() {
 
 		//This is where I'm working right now and doesn't work yet
 		//I think we'll need the same function to be called on -onitemupdate- too
-		//http://js-grid.com/docs/
+		//http://js-grid.com/docs/						-JS Grid Documentation
 		//http://jsfiddle.net/tabalinas/rkxbgzrx/     -Maybe good examples
 		//var myGrid = $("#jsGrid1").jsGrid.getName;	//This does stuff, keep for now
 		
@@ -123,7 +126,7 @@ function report_duplicates() {
 			if (!(allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition))) {
 				//Don't allow row to be edited/inserted
 				args.cancel = true;
-			}			
+			}
 		},
 		onItemUpdating:  function(args) {
 			//var result = allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition);
@@ -131,34 +134,34 @@ function report_duplicates() {
 			if (!(allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition))) {
 				//Don't allow row to be edited/inserted
 				args.cancel = true;
-			}			
+			}
 		}, 
 
 
 
 		//Grid data setup / validation - validation is turned off
         fields: [
-            { name: "ID", type: "text", width: 25 },
+            { name: "ID", type: "number", width: 25, editing: false },
             { name: "Address", type: "number", width: 50
-		//validate: {message: "Address field is required", validator: function(value) {return value > 0; } } 
+			//validate: {message: "Address field is required", validator: function(value) {return value > 0; } } 
 	    },
             { name: "Street", type: "text", width: 150
-		//validate: {message: "Street field is required", validator: function(value) {return value != ""; } } 
+			//validate: {message: "Street field is required", validator: function(value) {return value != ""; } } 
 	    },
             { name: "Side", type: "text", width: 50
-		//validate: {message: "Side field is required", validator: function(value) {return value != ""; } }
+			//validate: {message: "Side field is required", validator: function(value) {return value != ""; } }
 	    },
             { name: "Site", type: "number", width: 50
-		//validate: {message: "Site field is required", validator: function(value) {return value != ""; } } 
+			//validate: {message: "Site field is required", validator: function(value) {return value != ""; } } 
 	    },
-            { name: "Species", type: "select", items: species_list, valueField: "Name", textField: "Name"
-		//validate: {message: "Select species from list, required field", validator: function(value) {return value != ""; } }
+            { name: "Species", type: "select", items: species_list, valueField: "Name", textField: "Name", width: 150,
+			validate: {message: "Select species from list, required field", validator: function(value) {return value != ""; } }
 	    },
             { name: "DBH", type: "number", width: 50
-		//validate: {message: "DBH field is required, value greater than zero.", validator: function(value) {return value > 0; } }
+			//validate: {message: "DBH field is required, value greater than zero.", validator: function(value) {return value > 0; } }
 	    },
-            { name: "Condition", type: "select", items: condition_list, valueField: "Name", textField: "Name"
-		//validate: {message: "Select condition from list, required field", validator: function(value) {return value != ""; } }
+            { name: "Condition", type: "select", items: condition_list, valueField: "Name", textField: "Name",
+			validate: {message: "Select condition from list, required field", validator: function(value) {return value != ""; } }
 	    },
             { type: "control" }
         ]
@@ -167,12 +170,28 @@ function report_duplicates() {
 
 	<!-- Function to make sure that if (when add/edit a line) if species <> vacant, then user must have DBH>0 and condition <> "N/A"
 	function allow_changed_inventory(check_species, check_DBH, check_condition) {
-		//alert(check_species + check_DBH + check_condition);
-		var things = condition_list[5].Name;
-		things = things + species_list[3].Name;
-		alert('Test--' + things);
-		return false;
-	}		
+
+		//Get the N/A text from the condition list
+		var NA_text = condition_list[5].Name;
+		//Get the text from the species list
+		var vacant_text = species_list[3].Name;
+		
+		//If the entry isn't a vacant tree input, we need to check to make sure user has input a CONDITION that isn't NA_text
+		//and the DBH greater than 0
+		if (check_species != vacant_text && check_species != "") {
+			if (check_condition == NA_text || check_DBH <= 0) {
+				//This will cancel the item update/insert
+				alert('For any tree species that isn\'t vacant, DBH and condition are required.')
+				return false;
+			} 
+		}
+		//Otherwise, allow edit/insert to go through
+		return true;
+	}
+	
+	//Controller for run report button
+	 //run_report").run_report({})
+	
 	
 
 	</script>
