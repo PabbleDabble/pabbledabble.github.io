@@ -51,3 +51,75 @@
 	};
 	//-------------------------------------------------------------
 
+
+
+
+	
+		//When adding a new line, put a new unique ID number in, I couldn't figure how to make this field not editable during insertion
+		onItemInserting: function(args) {
+			args.item.ID = item_count;
+			$("#jsGrid1").jsGrid("refresh");
+		},
+
+
+
+
+
+
+
+
+http://stackoverflow.com/questions/16126357/create-html-table-using-javascript
+  
+
+
+
+		
+		//For this function, args is broken up into -grid- and -item-
+		//-grid- is the entire grid - working on accessing this
+		//-item- is the entry you're trying to work with		
+		onItemInserting: function(args) {
+			//var result = allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition);
+			//alert(result);
+			if (!(allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition))) {
+				//Don't allow row to be edited/inserted
+				args.cancel = true;
+			} else args.item.ID = ++item_count;
+			
+		},
+		onItemUpdating:  function(args) {
+			//var result = allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition);
+			//alert(result);
+			if (!(allow_changed_inventory(args.item.Species, args.item.DBH, args.item.Condition))) {
+				//Don't allow row to be edited/inserted
+				args.cancel = true;
+			}
+		}, 
+
+
+
+
+
+
+
+	//Function to make sure that if (when add/edit a line) if species <> vacant, then user must have DBH>0 and condition <> "N/A"
+	function allow_changed_inventory(check_species, check_DBH, check_condition) {
+
+		//Get the N/A text from the condition list
+		var NA_text = condition_list[5].Name;
+		//Get the text from the species list
+		var vacant_text = species_list[3].Name;
+		
+		//If the entry isn't a vacant tree input, we need to check to make sure user has input a CONDITION that isn't NA_text
+		//and the DBH greater than 0
+		if (check_species != vacant_text && check_species != "") {
+			if (check_condition == NA_text || check_DBH <= 0) {
+				//This will cancel the item update/insert
+				alert('For any tree species that isn\'t vacant, DBH and condition are required.')
+				return false;
+			} 
+		}
+		//Otherwise, allow edit/insert to go through
+		return true;
+	};
+
+
