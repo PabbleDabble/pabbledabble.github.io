@@ -1,0 +1,53 @@
+//A bunch of comments and trash that didn't work how I liked / etc.  
+//Save in case need to ref later, not part of any code
+
+
+	//This is where I'm working right now and doesn't work yet
+	//I think we'll need the same function to be called on -onitemupdate- too
+	//http://js-grid.com/docs/						-JS Grid Documentation
+	//http://jsfiddle.net/tabalinas/rkxbgzrx/     -Maybe good examples
+	//http://atott.ru/js-grid/
+	//https://github.com/tabalinas/jsgrid/issues/44     --This was the best one so far
+	//var myGrid = $("#jsGrid1").jsGrid.getName;	//This does stuff, keep for now
+	//var grid = $("#jsGrid1").data("JSGrid");     //This doesn't seem to work either
+	
+		
+	/*
+	//Passing the grid without .slice() will edits the actual grid
+	//mydata[0].ID = 77;
+	//$("#jsGrid1").jsGrid("refresh");
+	//return 0;		
+	
+	//Store row cound to iteration through
+	var rows_count = data.length;
+		
+	console.log(data.length);			
+		
+	//This will get all the field data...
+	//data_fields[i].name if you wanted the column names
+	//Not used now
+	var data_fields = $("#jsGrid1").jsGrid("option", "fields");
+	*/
+	
+	
+	
+	
+		
+
+	//-------------------------------------------------------------
+	//This isn't implemented / doesn't work at the moment
+	jsGrid.validators.custom = {
+		message: function(value, item) {
+			return "Custom -- " + item.count;
+		},
+		validator: function(value, item) {
+			return false;
+		}
+    };	
+	//This isn't implemented / doesn't work at the moment
+    jsGrid.beforeSubmit = function(postdata) {
+		alert("Test");
+		return true;
+	};
+	//-------------------------------------------------------------
+
