@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>  
+<html>
+
     <head>
 	<title>PTV</title>
 
@@ -20,6 +21,8 @@
 	<link type="text" href="records" />
 
     </head>
+	
+	
     <body>
 	<!-- This puts grid on page -->
 	<div id="jsGrid1"></div>
@@ -36,17 +39,31 @@
 	</div>
 
 
-
 <script> <!-- Holds all the grid information and scripts -->
 
 	<!-- I know the scripts could be in a separate js file, but for now I am just keeping everything together.  -->
-	function report_duplicates() {
-		//alert("Report Initiated");
-		var mygrid = $("#jsGrid1").jsGrid;
-		//('getrowdata', 0)   //didn't work...?
-		//alert(mygrid.data);
-		alert('Initialize Report...');
+
+	function report_duplicates(){
+		//I don't know what this is, but it's something
+		//alert("Test -- " + args);
+		var data = $("#jsGrid1").jsGrid;
+		alert("Test -- " + data.name);
 	}
+	
+	
+	//Controller for run report button
+	/*
+	$('#run_report').click(function (args) {
+		var data = $('jsGrid1').jsGrid('getrowdata', 1);
+		alert('Test -- ' + args.item.ID);
+	});
+	*/
+	
+	
+		
+	
+	
+	
 
 	//Data for table
     var tree_inv = [
@@ -86,7 +103,6 @@
 			return false;
 		}
     };	
-
 	//This isn't implemented / doesn't work at the moment
     jsGrid.beforeSubmit = function(postdata) {
 		alert("Test");
@@ -187,17 +203,10 @@
 		}
 		//Otherwise, allow edit/insert to go through
 		return true;
-	}
-	
-	//Controller for run report button
-	 //run_report").run_report({})
-	
-	
+	};
 
 	</script>
-
-
-
+	
     </body>
 </html>
 
